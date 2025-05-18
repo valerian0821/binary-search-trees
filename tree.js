@@ -38,25 +38,91 @@ class Tree {
     }
     let currentNode = this.root;
     let parentNode;
-    let direction;
+    let directionWent;
     while (currentNode) {
       if (value === currentNode.data) {
         return;
       }
       parentNode = currentNode; 
       if (value < currentNode.data) {
-        direction = "left";
         currentNode = currentNode.left;
+        directionWent = "left";
       } else {
-        direction = "right";
         currentNode = currentNode.right;
+        directionWent = "right";
       }
     }
     let newNode = new Node(value);
-    if (direction === "left") {
+    if (directionWent === "left") {
       parentNode.left = newNode;
     } else {
       parentNode.right = newNode;
+    }
+  }
+
+  remove(value) {
+    if (!Number.isFinite(value) || this.root === null) {
+      return;
+    }
+    let currentNode = this.root;
+    let parentNode;
+    let directionWent;
+    while (currentNode) {
+      if (value === currentNode.data) {
+
+        //Delete leaf node
+        if (!currentNode.left && !currentNode.right) {
+          if (currentNode === this.root) {
+            this.root = null;
+          } else {
+            if (directionWent === "left") {
+              parentNode.left = null;
+            } else {
+              parentNode.right = null;
+            }
+          }
+        }
+
+        //Delete node with two children
+        else if (currentNode.left && currentNode.right) {
+          let beReplacedNode = currentNode;
+          currentNode = currentNode.right;  
+          if (!currentNode.left) {
+            beReplacedNode.data = currentNode.data;
+            beReplacedNode.right = currentNode.right || null;
+          } else {
+            let previousNode;
+            while (currentNode.left) {
+              if (!currentNode.left.left) {
+                previousNode = currentNode;
+              }
+              currentNode = currentNode.left;
+            }
+            beReplacedNode.data = currentNode.data;
+            previousNode.left = currentNode.right || null;
+          }
+        }
+
+        //Delete node with one children
+        else {
+          const childNode = currentNode.left || currentNode.right;
+          if (directionWent === "left") {
+            parentNode.left = childNode;
+          } else {
+            parentNode.right = childNode;
+          }
+        }
+      }
+
+      //Traverse down to next node
+      parentNode = currentNode; 
+      if (value < currentNode.data) {
+        currentNode = currentNode.left;
+        directionWent = "left";
+      } else {
+        currentNode = currentNode.right;
+        directionWent = "right";
+      }
     }
   }
 }
