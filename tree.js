@@ -12,6 +12,9 @@ class Tree {
   }
 
   buildTree(array) {
+    if (array.length === 0) {
+      return null;
+    }
     if (array.length === 1) {
       const rootNode = new Node(array[0]);
       return rootNode;
@@ -35,6 +38,9 @@ class Tree {
   insert(value) {
     if (!Number.isFinite(value)) {
       return;
+    }
+    if (this.root === null) {
+      this.root = new Node(value);
     }
     let currentNode = this.root;
     let parentNode;
@@ -60,7 +66,7 @@ class Tree {
     }
   }
 
-  remove(value) {
+  deleteItem(value) {
     if (!Number.isFinite(value) || this.root === null) {
       return;
     }
@@ -81,26 +87,24 @@ class Tree {
               parentNode.right = null;
             }
           }
+          return;
         }
 
         //Delete node with two children
         else if (currentNode.left && currentNode.right) {
-          let beReplacedNode = currentNode;
-          currentNode = currentNode.right;  
-          if (!currentNode.left) {
-            beReplacedNode.data = currentNode.data;
-            beReplacedNode.right = currentNode.right || null;
-          } else {
-            let previousNode;
-            while (currentNode.left) {
-              if (!currentNode.left.left) {
-                previousNode = currentNode;
-              }
-              currentNode = currentNode.left;
-            }
-            beReplacedNode.data = currentNode.data;
-            previousNode.left = currentNode.right || null;
+          let successorParent = currentNode;
+          let successor = currentNode.right;
+          while (successor.left) {
+            successorParent = successor;
+            successor = successor.left;
           }
+          currentNode.data = successor.data;
+          if (successorParent.left === successor) {
+            successorParent.left = successor.right;
+          } else {
+            successorParent.right = successor.right;
+          }
+          return;
         }
 
         //Delete node with one children
@@ -111,6 +115,7 @@ class Tree {
           } else {
             parentNode.right = childNode;
           }
+          return;
         }
       }
 
@@ -143,4 +148,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 // const cleanArr = array.sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index);
 let tree = new Tree([1, 2, 3, 4, 5, 6, 7]);
 prettyPrint(tree.root);
+tree.deleteItem(4);
+tree.deleteItem(6);
 console.dir(tree, { depth: null, colors: true });
+prettyPrint(tree.root);
