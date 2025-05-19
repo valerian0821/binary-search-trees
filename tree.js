@@ -130,6 +130,23 @@ class Tree {
       }
     }
   }
+
+  find(value) {
+    if (!Number.isFinite(value) || this.root === null) {
+      return null;
+    }
+    let currentNode = this.root;
+    while (currentNode) {
+      if (value === currentNode.data) {
+        return currentNode;
+      } else if (value < currentNode.data) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
+    }
+    return null;
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -148,7 +165,5 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 // const cleanArr = array.sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index);
 let tree = new Tree([1, 2, 3, 4, 5, 6, 7]);
 prettyPrint(tree.root);
-tree.deleteItem(4);
-tree.deleteItem(6);
 console.dir(tree, { depth: null, colors: true });
-prettyPrint(tree.root);
+console.log(tree.find("daksjda"));
