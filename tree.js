@@ -167,6 +167,30 @@ class Tree {
       }
     }
   }
+
+  levelOrderRec(callback, queue) {
+    if (!queue) {
+      if (typeof callback !== "function") {
+        throw new Error("A callback is required.");
+      }
+      if (this.root === null) {
+        return;
+      }
+      queue = [this.root];
+    }
+    if (queue.length === 0) {
+      return;
+    }
+    const currentNode = queue.shift();
+    callback(currentNode);
+    if (currentNode.left) {
+      queue.push(currentNode.left);
+      }
+    if (currentNode.right) {
+      queue.push(currentNode.right);
+    }
+    this.levelOrderRec(callback, queue);
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
