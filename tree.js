@@ -231,7 +231,7 @@ class Tree {
   height(value) {
     let node = this.find(value);
     if (node === null) {
-      return null;
+      return -1;
     }
     const queue = [node];
     let height = 0;
@@ -283,6 +283,31 @@ class Tree {
     }
     return null;
   }
+
+  isBalancedRough(currentNode = this.root) {
+    if (this.root === null) {
+      return true;
+    }
+    if (currentNode === null) {
+      return true;
+    }
+    const leftSubBalance = this.isBalanced(currentNode.left);
+    const rightSubBalance = this.isBalanced(currentNode.right);
+    let leftSubHeight;
+    let rightSubHeight;
+    if (currentNode.left === null) {
+      leftSubHeight = -1;
+    } else {
+      leftSubHeight = this.height(currentNode.left.data)
+    }
+    if (currentNode.right === null) {
+      rightSubHeight = -1;
+    } else {
+      rightSubHeight = this.height(currentNode.right.data)
+    }
+    const balance = Math.abs(leftSubHeight - rightSubHeight) <= 1;
+    return (leftSubBalance && rightSubBalance && balance);
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -300,6 +325,8 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 // const cleanArr = array.sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index);
 let tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8]);
-tree.insert(9);
+// let tree = new Tree([]);
+// let tree = new Tree([4]);
+// tree.insert(9);
 prettyPrint(tree.root);
-console.log(tree.depth("dsd"));
+console.log(tree.isBalanced());
