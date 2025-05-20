@@ -254,6 +254,35 @@ class Tree {
     }
     return height;
   }
+
+  depth(value) {
+    if (!Number.isFinite(value) || this.root === null) {
+      return null;
+    }
+    const queue = [this.root];
+    let depth = 0;
+    let levelSize = 1;
+    while (queue.length > 0) {
+      const currentNode = queue.shift();
+      if (value === currentNode.data) {
+        return depth;
+      }
+      levelSize--;
+      if (currentNode.left) {
+        queue.push(currentNode.left);
+      }
+      if (currentNode.right) {
+        queue.push(currentNode.right);
+      }
+      if (levelSize === 0) {
+        levelSize = queue.length;
+        if (queue.length > 0) {
+          depth++;
+        }
+      }
+    }
+    return null;
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -271,5 +300,6 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 // const cleanArr = array.sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index);
 let tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8]);
+tree.insert(9);
 prettyPrint(tree.root);
-console.log(tree.height(4));
+console.log(tree.depth("dsd"));
