@@ -191,6 +191,42 @@ class Tree {
     }
     this.levelOrderRec(callback, queue);
   }
+
+  inOrder(callback, currentNode = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("The callback must be a function.");
+    }
+    if (currentNode === null) {
+      return;
+    }
+    this.inOrder(callback, currentNode.left);
+    callback(currentNode);
+    this.inOrder(callback, currentNode.right);
+  }
+
+  preOrder(callback, currentNode = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("The callback must be a function.");
+    }
+    if (currentNode === null) {
+      return;
+    }
+    callback(currentNode);
+    this.preOrder(callback, currentNode.left);
+    this.preOrder(callback, currentNode.right);
+  }
+
+  postOrder(callback, currentNode = this.root) {
+    if (typeof callback !== "function") {
+      throw new Error("The callback must be a function.");
+    }
+    if (currentNode === null) {
+      return;
+    }
+    this.postOrder(callback, currentNode.left);
+    this.postOrder(callback, currentNode.right);
+    callback(currentNode);
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
