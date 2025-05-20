@@ -326,8 +326,17 @@ class Tree {
       const height = 1 + Math.max(leftSubTree.height, rightSubTree.height);
 
       return { balanced, height };
+    }
+    return check(this.root).balanced;
   }
-  return check(this.root).balanced;
+
+  rebalance() {
+    const newArr = [];
+    const convertTreetoArr = (node) => {
+      newArr.push(node.data);
+    }
+    this.levelOrderIter(convertTreetoArr);
+    this.root = this.buildTree(sortAndUniqueFinite(newArr));
   }
 }
 
@@ -344,10 +353,16 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
+const sortAndUniqueFinite = (arr) => {
+  // Filter finite numbers, remove duplicates, then sort numerically
+  return [...new Set(arr.filter(Number.isFinite))].sort((a, b) => a - b);
+}
+
 // const cleanArr = array.sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index);
-let tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8]);
+let tree = new Tree(sortAndUniqueFinite([1, 2, 3, 4, 5, 6, 7, 8]));
 // let tree = new Tree([]);
 // let tree = new Tree([4]);
-// tree.insert(9);
+tree.insert(9);
 prettyPrint(tree.root);
-console.log(tree.isBalanced());
+tree.rebalance();
+prettyPrint(tree.root);
