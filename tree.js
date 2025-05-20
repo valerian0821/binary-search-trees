@@ -308,6 +308,27 @@ class Tree {
     const balance = Math.abs(leftSubHeight - rightSubHeight) <= 1;
     return (leftSubBalance && rightSubBalance && balance);
   }
+
+  isBalanced() {
+    const check = (currentNode) => {
+      if (currentNode === null) {
+        return { balanced: true, height: -1 };
+      } 
+
+      const leftSubTree = check(currentNode.left);
+      const rightSubTree = check(currentNode.right);
+
+      const balanced =
+        leftSubTree.balanced &&
+        rightSubTree.balanced &&
+        Math.abs(leftSubTree.height - rightSubTree.height) <= 1;
+
+      const height = 1 + Math.max(leftSubTree.height, rightSubTree.height);
+
+      return { balanced, height };
+  }
+  return check(this.root).balanced;
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
