@@ -227,6 +227,33 @@ class Tree {
     this.postOrder(callback, currentNode.right);
     callback(currentNode);
   }
+
+  height(value) {
+    let node = this.find(value);
+    if (node === null) {
+      return null;
+    }
+    const queue = [node];
+    let height = 0;
+    let levelSize = 1;
+    while (queue.length > 0) {
+      const currentNode = queue.shift();
+      levelSize--;
+      if (currentNode.left) {
+        queue.push(currentNode.left);
+      }
+      if (currentNode.right) {
+        queue.push(currentNode.right);
+      }
+      if (levelSize === 0) {
+        levelSize = queue.length;
+        if (queue.length > 0) {
+          height++;
+        }
+      }
+    }
+    return height;
+  }
 }
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -243,7 +270,6 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 // const cleanArr = array.sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index);
-let tree = new Tree([1, 2, 3, 4, 5, 6, 7]);
+let tree = new Tree([1, 2, 3, 4, 5, 6, 7, 8]);
 prettyPrint(tree.root);
-console.dir(tree, { depth: null, colors: true });
-console.log(tree.find("daksjda"));
+console.log(tree.height(4));
