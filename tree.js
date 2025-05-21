@@ -358,11 +358,80 @@ const sortAndUniqueFinite = (arr) => {
   return [...new Set(arr.filter(Number.isFinite))].sort((a, b) => a - b);
 }
 
-// const cleanArr = array.sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index);
-let tree = new Tree(sortAndUniqueFinite([1, 2, 3, 4, 5, 6, 7, 8]));
-// let tree = new Tree([]);
-// let tree = new Tree([4]);
-tree.insert(9);
-prettyPrint(tree.root);
-tree.rebalance();
-prettyPrint(tree.root);
+const createRandomArrLessThan100 = () => {
+  const randomArray = Array.from({ length: 20 }, () => Math.floor(Math.random() * 100));
+  return randomArray;
+}
+
+const createRandomArrBiggerThan100 = () => {
+  const randomArray = Array.from({ length: 5 }, () => Math.floor(Math.random() * 100) + 101);
+  return randomArray;
+}
+
+const runTestScript = () => {
+  const arr = createRandomArrLessThan100();
+  let tree = new Tree(sortAndUniqueFinite(arr));
+  console.log(`Balanced: ${tree.isBalanced()}`);
+  prettyPrint(tree.root);
+
+  const levelOrderArr = [];
+  tree.levelOrderIter(node => {
+    levelOrderArr.push(node.data);
+  });
+  console.log(`LevelOrder: ${levelOrderArr}`);
+
+  const inOrderArr = [];
+  tree.inOrder(node => {
+    inOrderArr.push(node.data);
+  });
+  console.log(`InOrder: ${inOrderArr}`);
+
+  const preOrderArr = [];
+  tree.preOrder(node => {
+    preOrderArr.push(node.data);
+  });
+  console.log(`PreOrder: ${preOrderArr}`);
+
+  const postOrderArr = [];
+  tree.postOrder(node => {
+    postOrderArr.push(node.data);
+  });
+  console.log(`PostOrder: ${postOrderArr}`);
+
+  const insertArr = createRandomArrBiggerThan100();
+  for (let i = 0; i < insertArr.length; i++) {
+    tree.insert(insertArr[i]);
+  }
+  console.log(`Balanced: ${tree.isBalanced()}`);
+  prettyPrint(tree.root);
+  tree.rebalance();
+  console.log("Tree has been rebelanced.");
+  console.log(`Balanced: ${tree.isBalanced()}`);
+  prettyPrint(tree.root);
+
+  levelOrderArr.length = 0;
+  tree.levelOrderIter(node => {
+    levelOrderArr.push(node.data);
+  });
+  console.log(`LevelOrder: ${levelOrderArr}`);
+
+  inOrderArr.length = 0;
+  tree.inOrder(node => {
+    inOrderArr.push(node.data);
+  });
+  console.log(`InOrder: ${inOrderArr}`);
+
+  preOrderArr.length = 0;
+  tree.preOrder(node => {
+    preOrderArr.push(node.data);
+  });
+  console.log(`PreOrder: ${preOrderArr}`);
+
+  postOrderArr.length = 0;
+  tree.postOrder(node => {
+    postOrderArr.push(node.data);
+  });
+  console.log(`PostOrder: ${postOrderArr}`);
+}
+
+runTestScript();
